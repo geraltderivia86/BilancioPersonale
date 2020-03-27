@@ -17,6 +17,17 @@ resp = {200: 'Success', 400: 'user already in db', 400: 'Content not allowed', \
     400: 'Payload too large', 500: 'Server Error'}
 
 
+@users.route('/<string:email>/<string:password>')
+class Get_User(Resource):
+    def get(self,email,password):
+        ''' login with usrname and password'''
+        u = User.query.filter_by(email=email).first()
+        if not u:
+           return 'User Not Found', 404
+        elif u.password != password:
+           return 'Wrong Password', 400
+        return jsonify(u.asDict()),200
+
 @users.route('')
 class Users(Resource):
     def get(self):
